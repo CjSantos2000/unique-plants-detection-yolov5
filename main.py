@@ -13,15 +13,6 @@ import yolov5
 app = Flask(__name__)
 
 
-model = yolov5.load("models/uniq.pt")
-# set model parameters
-model.conf = 0.5  # NMS confidence threshold
-model.iou = 0.45  # NMS IoU threshold
-model.agnostic = False  # NMS class-agnostic
-model.multi_label = False  # NMS multiple labels per box
-model.max_det = 1000  # maximum number of detections per image
-
-
 @app.route("/")
 def hello():
     return "Crop & Corn Detection API"
@@ -37,6 +28,8 @@ def detect_uniq_image():
     # Check if the file has a valid content type (e.g., image/jpeg, image/png, >
     if not allowed_file(image_file.filename):
         abort(415, "Unsupported Media Type")
+
+    model = initialize_model()
 
     # Read the image data and save it to a file
     image_data = image_file.read()
@@ -68,6 +61,18 @@ def detect_uniq_image():
     }
 
     return jsonify(result_dict), 200
+
+
+def initialize_model():
+    model = yolov5.load("models/uniq.pt")
+    # set model parameters
+    model.conf = 0.5  # NMS confidence threshold
+    model.iou = 0.45  # NMS IoU threshold
+    model.agnostic = False  # NMS class-agnostic
+    model.multi_label = False  # NMS multiple labels per box
+    model.max_det = 1000  # maximum number of detections per image
+
+    return model
 
 
 # Define a function to check if the file extension is allowed
