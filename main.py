@@ -1,13 +1,13 @@
-# import pathlib
+import pathlib
 
-# temp = pathlib.PosixPath
-# pathlib.PosixPath = pathlib.WindowsPath
+temp = pathlib.PosixPath
+pathlib.PosixPath = pathlib.WindowsPath
 
 
 import io
 from flask import Flask, request, jsonify, abort
 from PIL import Image
-import yolov5
+import torch
 
 
 app = Flask(__name__)
@@ -64,7 +64,7 @@ def detect_uniq_image():
 
 
 def initialize_model():
-    model = yolov5.load("models/uniq.pt")
+    model = torch.hub.load("yolov5", "custom", path="models/uniq.pt", source="local")
     # set model parameters
     model.conf = 0.5  # NMS confidence threshold
     model.iou = 0.45  # NMS IoU threshold
