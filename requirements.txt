@@ -19,7 +19,7 @@
 
 
 
-Flask==2.1.1
+Flask==2.2.2
 gunicorn==19.9.0
 matplotlib>=3.2.2
 numpy>=1.18.5
@@ -34,3 +34,4 @@ tensorboard>=2.4.1
 seaborn>=0.11.0
 pandas>=0.19
 thop == 0.0.31-2005241907
+Werkzeug==2.3.7

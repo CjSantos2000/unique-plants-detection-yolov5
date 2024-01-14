@@ -31,9 +31,19 @@ def detect_uniq_image():
 
     model = initialize_model()
 
-    # Read the image data and save it to a file
-    image_data = image_file.read()
-    img = Image.open(io.BytesIO(image_data))
+    print(image_file)
+
+    try:
+        # Read the image data and save it to a file
+        image_data = image_file.read()
+        img = Image.open(io.BytesIO(image_data))
+    except Exception as e:
+        result_dict = {
+            "detected": "None",
+            "confidence": "None",
+            "message": "Invalid image format, Please upload a valid image",
+        }
+        return jsonify(result_dict), 400
 
     results = model(img, size=640)
     result = None
