@@ -8,7 +8,7 @@ import io
 from flask import Flask, request, jsonify, abort
 from PIL import Image
 import torch
-
+import imageio.v2 as imageio
 
 app = Flask(__name__)
 
@@ -33,10 +33,22 @@ def detect_uniq_image():
 
     print(image_file)
 
+    # try:
+    #     # Read the image data and save it to a file
+    #     image_data = image_file.read()
+    #     img = Image.open(io.BytesIO(image_data))
+    # except Exception as e:
+    #     result_dict = {
+    #         "detected": "None",
+    #         "confidence": "None",
+    #         "message": "Invalid image format, Please upload a valid image",
+    #     }
+    #     return jsonify(result_dict), 400
+
     try:
         # Read the image data and save it to a file
         image_data = image_file.read()
-        img = Image.open(io.BytesIO(image_data))
+        img = imageio.imread(image_data)
     except Exception as e:
         result_dict = {
             "detected": "None",
