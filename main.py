@@ -4,9 +4,7 @@
 # pathlib.PosixPath = pathlib.WindowsPath
 
 
-import io
 from flask import Flask, request, jsonify, abort
-from PIL import Image
 import torch
 import imageio.v2 as imageio
 
@@ -33,18 +31,6 @@ def detect_uniq_image():
 
     print(image_file)
 
-    # try:
-    #     # Read the image data and save it to a file
-    #     image_data = image_file.read()
-    #     img = Image.open(io.BytesIO(image_data))
-    # except Exception as e:
-    #     result_dict = {
-    #         "detected": "None",
-    #         "confidence": "None",
-    #         "message": "Invalid image format, Please upload a valid image",
-    #     }
-    #     return jsonify(result_dict), 400
-
     try:
         # Read the image data and save it to a file
         image_data = image_file.read()
@@ -57,6 +43,7 @@ def detect_uniq_image():
         }
         return jsonify(result_dict), 400
 
+    # Detection
     results = model(img, size=640)
     result = None
     detected = []
@@ -87,12 +74,6 @@ def detect_uniq_image():
 
 def initialize_model():
     model = torch.hub.load("yolov5", "custom", path="models/uniq.pt", source="local")
-    # set model parameters
-    model.conf = 0.5  # NMS confidence threshold
-    model.iou = 0.45  # NMS IoU threshold
-    model.agnostic = False  # NMS class-agnostic
-    model.multi_label = False  # NMS multiple labels per box
-    model.max_det = 1000  # maximum number of detections per image
 
     return model
 
